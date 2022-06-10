@@ -1,8 +1,7 @@
 # Omodayo Origunwa
 ---
-- [ ] Site skeleton
-- [ ] Project API endpoints
-- [ ] Resume PDF
-- [ ] LinkedIn Link
-- [ ] Footer design (LinkedIn Link, Email, Github)
-- [ ] Contact href that navigates to footer
+- [x] Site skeleton
+- [x] Project List
+- [x] Resume PDF
+- [x] LinkedIn Link
+- [x] Github Link
