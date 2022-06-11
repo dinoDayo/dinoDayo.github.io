@@ -25,5 +25,6 @@ Thanks again!
 
 Best,    
 Dayo Origunwa 
+---
 
-## [*Click here to start to Friends Assessment*](https://forms.gle/QupHXB78pfBJ9unk8){:target="\_blank"}
+## [*Click here to start the Friends Assessment*](https://forms.gle/QupHXB78pfBJ9unk8){:target="\_blank"}
