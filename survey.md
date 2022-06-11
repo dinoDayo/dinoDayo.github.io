@@ -2,7 +2,7 @@
 ---
 
 ## The *Survey*
-Welcome Friend! 
+Welcome Fam. 
 
 Thank you for taking the time to help me with this survey!
 
