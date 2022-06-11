@@ -1,7 +1,7 @@
 # Friends Assessment
 ---
 
-## The 'Survey'
+## The *Survey*
 Welcome Friend! 
 
 Thank you for taking the time to help me with this survey!
@@ -25,4 +25,5 @@ Thanks again!
 
 Best,
 Dayo Origunwa 
-[Link to Friends Assessment](https://forms.gle/QupHXB78pfBJ9unk8){:target="\_blank"}
+
+## [Link to Friends Assessment](https://forms.gle/QupHXB78pfBJ9unk8){:target="\_blank"}
