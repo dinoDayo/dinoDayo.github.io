@@ -3,7 +3,7 @@
 
 source "https://rubygems.org"
 
-gemspec
+#gemspec
 
 # Allowing local site testing
 gem "github-pages", group: :jekyll_plugins
