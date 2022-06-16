@@ -1,7 +1,10 @@
-theme: jekyll-theme-cayman
-
 # Edits based on github docs here: remote_theme: tuur29/pages-themes-cayman
 #remote_theme: tuur29/pages-themes-cayman
+
+# Edits based on github docs here: remote_theme: https://github.com/pages-themes/cayman
+remote_theme: pages-themes/cayman@v0.2.0
+plugins:
+  - jekyll-remote-theme
 
 # Title & description
 title: [Omodayo Origunwa]
@@ -9,3 +12,12 @@ description: [Welcome to my website! Issa Work in Progress]
 
 # Site usage monitoring
 google_analytics: [G-DTHLMSW9SX]
+
+# Setting Front Matter Defaults re. http://jekyllrb.com/docs/configuration/front-matter-defaults/
+defaults:
+  -
+    scope:
+      path: "" # an empty string here means all files in the project
+    values:
+      layout: "default"
+      author: "Omodayo Origunwa"
