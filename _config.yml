@@ -21,3 +21,8 @@ defaults:
     values:
       layout: "default"
       author: "Omodayo Origunwa"
+
+  - scope:
+      path: "assets/resumes"
+    values:
+      current: true
