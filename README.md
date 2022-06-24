@@ -1,37 +1,18 @@
-## Welcome to GitHub Pages
+# Welcome!
+---
 
-You can use the [editor on GitHub](https://github.com/dinoDayo/dinoDayo.github.io/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
+## About Me
+Welcome to my website! My name is Omodayo Origunwa, but you can call me Dayo. I am originally from Oakland, California, and moved to the east coast for college and the start of my career. Some of my passions include soccer, painting and data science. I made this website to showcase some of the work I am proud of, let me know what you think!
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+This website is a work in progress, feedback is welcome on the repo [here](https://github.com/dinoDayo/dinoDayo.github.io). 
 
-### Markdown
+### The citing of sources...
+- [Dependency management for ruby project on Mac](http://www.wnagrodzki.com/managing_gems_with_bundler_on_macOS/)
+- [Getting started with local site testing](http://dh.obdurodon.org/jekyll.xhtml)
+- [Getting started with Github Pages](https://pages.github.com/)
+- [Choosing a theme for site](https://github.com/pages-themes/cayman)
+- [Gemspec vs. Gemfile](https://medium.com/@divya.n/gemfile-vs-gemspec-ee72512da246#:~:text=So%20Gemspec%20is%20basically%20information,dependencies%20apart%20from%20your%20gem.)
+- [Inspiration](http://mowillia.github.io/)
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/dinoDayo/dinoDayo.github.io/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+### General notes...
+- Bundle manages dependencies for Ruby projects. Ruby dependencies are called gems. To add a dependency to your project, first add the ruby dependency with `gem install <package_name> -v <version_if_needed> --user-install`, then add the dependency to your project using `bundle add <package-name>`. 
