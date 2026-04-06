@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LinkedIn Token Decoder</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f5;
+      color: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+      padding: 32px;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    h1 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px 12px;
+      font-family: "SF Mono", "Fira Code", monospace;
+      font-size: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    textarea:focus { border-color: #0a66c2; }
+
+    .hint {
+      font-size: 11px;
+      color: #888;
+      margin-top: 6px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      width: 100%;
+      padding: 11px;
+      background: #0a66c2;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    button:hover { background: #004182; }
+
+    .result {
+      margin-top: 24px;
+      display: none;
+    }
+
+    .result.visible { display: block; }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px 16px;
+      align-items: baseline;
+    }
+
+    .result-label {
+      font-size: 12px;
+      color: #666;
+      white-space: nowrap;
+    }
+
+    .result-value {
+      font-size: 14px;
+      font-weight: 500;
+      word-break: break-all;
+    }
+
+    .result-value.highlight {
+      font-size: 22px;
+      font-weight: 700;
+      color: #0a66c2;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #eee;
+      margin: 16px 0;
+    }
+
+    .raw-section {
+      margin-top: 20px;
+    }
+
+    .raw-toggle {
+      font-size: 12px;
+      color: #0a66c2;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      width: auto;
+      text-align: left;
+      font-weight: 400;
+    }
+
+    .raw-toggle:hover { background: none; text-decoration: underline; }
+
+    .raw-data {
+      display: none;
+      margin-top: 10px;
+      padding: 12px;
+      background: #f8f8f8;
+      border-radius: 6px;
+      font-family: "SF Mono", "Fira Code", monospace;
+      font-size: 11px;
+      line-height: 1.6;
+      word-break: break-all;
+      color: #333;
+    }
+
+    .raw-data.visible { display: block; }
+
+    .error {
+      margin-top: 16px;
+      padding: 12px 14px;
+      background: #fff0f0;
+      border: 1px solid #fcc;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #c00;
+      display: none;
+    }
+
+    .error.visible { display: block; }
+
+    .steps {
+      background: #f8f9ff;
+      border: 1px solid #dde3f5;
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+
+    .steps-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .steps-list {
+      padding-left: 18px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #333;
+    }
+
+    .steps-list li { margin-bottom: 4px; }
+
+    .steps-list code {
+      background: #eef0f8;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-family: "SF Mono", "Fira Code", monospace;
+      font-size: 11px;
+    }
+
+    .steps-note {
+      font-size: 12px;
+      color: #666;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #dde3f5;
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h1>LinkedIn Token Decoder</h1>
+  <p class="subtitle">
+    Decodes the persistent tracking token LinkedIn stores in your
+    browser's localStorage and shows when LinkedIn first set it.
+    All processing happens in your browser — nothing is sent anywhere.
+  </p>
+
+  <div class="steps">
+    <div class="steps-title">How to retrieve your token</div>
+    <ol class="steps-list">
+      <li>
+        <strong>Open Chrome</strong> and navigate to
+        <code>https://www.linkedin.com</code>. You do not need to log in.
+      </li>
+      <li>
+        <strong>Open DevTools</strong> by pressing
+        <code>Cmd + Option + I</code> on Mac or <code>F12</code> on Windows.
+      </li>
+      <li>
+        Click the <strong>Application</strong> tab in the DevTools panel.
+        If you do not see it, click the <code>»</code> overflow arrow at
+        the right end of the tab bar.
+      </li>
+      <li>
+        In the left sidebar, expand <strong>Local Storage</strong> and
+        click <strong>https://www.linkedin.com</strong>.
+      </li>
+      <li>
+        Find the row where the <strong>Key</strong> column shows
+        <code>f</code>. Click the row to select it.
+      </li>
+      <li>
+        Click into the <strong>Value</strong> column, select all
+        (<code>Cmd+A</code> or <code>Ctrl+A</code>), copy, and paste
+        into the box below.
+      </li>
+    </ol>
+    <p class="steps-note">
+      If there is no row with key <code>f</code>, LinkedIn may not have
+      set a persistent token in your browser yet, or your storage has
+      been cleared since your last visit.
+    </p>
+  </div>
+
+  <label for="token">Token value</label>
+  <textarea
+    id="token"
+    placeholder="Paste the value of the 'f' key from Chrome DevTools → Application → Local Storage → https://www.linkedin.com"
+    spellcheck="false"
+  ></textarea>
+  <p class="hint">
+    To find this value: open Chrome → DevTools (Cmd+Option+I) →
+    Application → Local Storage → https://www.linkedin.com → key: f
+  </p>
+
+  <button onclick="decode()">Decode token</button>
+
+  <div class="error" id="error"></div>
+
+  <div class="result" id="result">
+    <div class="result-grid">
+      <span class="result-label">Tracking started</span>
+      <span class="result-value highlight" id="out-date"></span>
+
+      <span class="result-label">Duration</span>
+      <span class="result-value" id="out-duration"></span>
+
+      <span class="result-label">Token version</span>
+      <span class="result-value" id="out-version"></span>
+
+      <span class="result-label">Expires</span>
+      <span class="result-value" id="out-expires">Never — localStorage has no expiry mechanism</span>
+    </div>
+
+    <hr class="divider">
+
+    <div class="raw-section">
+      <button class="raw-toggle" onclick="toggleRaw()">
+        Show raw bytes ▸
+      </button>
+      <div class="raw-data" id="raw-data"></div>
+    </div>
+  </div>
+
+
+</div>
+
+<script>
+  function decode() {
+    const raw = document.getElementById('token').value.trim();
+    const errorEl  = document.getElementById('error');
+    const resultEl = document.getElementById('result');
+
+    errorEl.className  = 'error';
+    resultEl.className = 'result';
+
+    if (!raw) {
+      showError('Please paste a token value.');
+      return;
+    }
+
+    // Normalise URL-safe base64 to standard base64
+    let b64 = raw.replace(/-/g, '+').replace(/_/g, '/');
+    // Strip any whitespace
+    b64 = b64.replace(/\s/g, '');
+    // Add padding
+    while (b64.length % 4 !== 0) b64 += '=';
+
+    let bytes;
+    try {
+      const binary = atob(b64);
+      bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
+    } catch (e) {
+      showError(
+        'Could not base64-decode this value. Make sure you copied the ' +
+        'full value of the f key from Chrome DevTools.'
+      );
+      return;
+    }
+
+    // Token structure (confirmed via xxd analysis):
+    //   byte  0:   version byte
+    //   bytes 1-8: Unix timestamp ms, 64-bit little-endian
+    //   bytes 9+:  cryptographic payload
+    if (bytes.length < 9) {
+      showError(
+        'Token is too short to contain a timestamp. ' +
+        'Expected at least 9 bytes, got ' + bytes.length + '.'
+      );
+      return;
+    }
+
+    // Read 64-bit little-endian timestamp from bytes 1-8.
+    // JavaScript bitwise ops are 32-bit so we read as two 32-bit halves.
+    const lo = bytes[1] | (bytes[2] << 8) | (bytes[3] << 16) | (bytes[4] << 24);
+    const hi = bytes[5] | (bytes[6] << 8) | (bytes[7] << 16) | (bytes[8] << 24);
+    // Combine as a float to avoid signed 32-bit overflow
+    const tsMs = (hi >>> 0) * 4294967296 + (lo >>> 0);
+
+    // Sanity check: 2010-01-01 to 2030-01-01 in ms
+    const TS_MIN = 1262304000000;
+    const TS_MAX = 1893456000000;
+
+    if (tsMs < TS_MIN || tsMs > TS_MAX) {
+      showError(
+        'The timestamp decoded from this token (' + tsMs + ') is outside ' +
+        'the expected range. This may not be a LinkedIn tracking token, ' +
+        'or the token format may have changed.'
+      );
+      return;
+    }
+
+    const issued  = new Date(tsMs);
+    const now     = new Date();
+    const version = '0x' + bytes[0].toString(16).padStart(2, '0');
+
+    // Format issue date
+    const dateStr = issued.toISOString().replace('T', ' ').replace(/\.\d+Z/, ' UTC');
+
+    // Calculate duration
+    const duration = formatDuration(issued, now);
+
+    // Raw hex dump
+    const hexStr = Array.from(bytes)
+      .map((b, i) => {
+        const hex = b.toString(16).padStart(2, '0');
+        const labels = {
+          0: 'version',
+          1: 'timestamp↓',
+          8: 'timestamp end',
+          9: 'payload↓',
+        };
+        return labels[i]
+          ? `\n[byte ${i.toString().padStart(2)}] ${hex}  ← ${labels[i]}\n`
+          : `[byte ${i.toString().padStart(2)}] ${hex}`;
+      })
+      .join('\n');
+
+    document.getElementById('out-date').textContent     = dateStr;
+    document.getElementById('out-duration').textContent = duration;
+    document.getElementById('out-version').textContent  = version;
+    document.getElementById('raw-data').textContent     =
+      'Hex dump of decoded token bytes:\n\n' + hexStr;
+
+    resultEl.className = 'result visible';
+  }
+
+  function formatDuration(from, to) {
+    const days   = Math.floor((to - from) / 86400000);
+    const years  = Math.floor(days / 365);
+    const months = Math.floor((days % 365) / 30);
+    const rem    = days % 30;
+    const parts  = [];
+    if (years)  parts.push(years  + (years  === 1 ? ' year'  : ' years'));
+    if (months) parts.push(months + (months === 1 ? ' month' : ' months'));
+    if (rem || parts.length === 0)
+                parts.push(rem    + (rem    === 1 ? ' day'   : ' days'));
+    return parts.join(', ');
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('error');
+    el.textContent  = msg;
+    el.className    = 'error visible';
+  }
+
+  function toggleRaw() {
+    const el  = document.getElementById('raw-data');
+    const btn = document.querySelector('.raw-toggle');
+    const visible = el.classList.toggle('visible');
+    btn.textContent = visible ? 'Hide raw bytes ▾' : 'Show raw bytes ▸';
+  }
+
+  // Allow pasting and pressing Enter to decode
+  document.getElementById('token').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      decode();
+    }
+  });
+</script>
+</body>
+</html>
